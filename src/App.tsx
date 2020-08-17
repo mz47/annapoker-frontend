@@ -1,26 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Box, Button, Header, Heading} from "grommet/es6";
+import {Link, Route} from "react-router-dom";
+import {AddCircle, Home, Refresh, Trash, View} from "grommet-icons/es6";
+import {LoginPage} from "./LoginPage";
+import PokerPage from "./PokerPage";
+import {StartPage} from "./StartPage";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => (
+  <Box>
+    <Route path={"/"} exact component={StartPage}/>
+    <Route path={"/poker"} component={PokerPage}/>
+  </Box>
+)
 
 export default App;
