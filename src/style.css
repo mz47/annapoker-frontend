@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+body {
+    margin: 0;
+}
+
+.App {
+    text-align: center;
+}
+
+.connectedUsers {
+    display: block;
+}
+
+.conceil {
+    text-shadow: 0 0 18px black;
+    color: transparent;
+    user-select: none;
+}
+
+.pokercard-container {
+    display: grid;
+}
+
+.pokercard {
+    display: flex;
+    width: 10vw;
+    height: 27vh;
+    border-radius: 1.3em;
+    margin: 0.3vw;
+    cursor: pointer;
+}
+
+.pokercard:hover {
+    transition: transform .2s;
+    transform: scale(1.2);
+}
+
+.pokercard-overlay {
+    margin: 0.3vw;
+    border-radius: 1.3em;
+    background-color: rgba(255, 255, 255, 0.8);
+    cursor: not-allowed;
+}
+
+.pokercard, .pokercard-overlay {
+    grid-area: 1/1;
+}
+
+.pokercard-image {
+    display: block;
+    margin: auto;
+    width: 80%;
+    height: auto;
+    user-select: none;
+}
+
+.card-1 {
+    background-color: aquamarine;
+}
+
+.card-2 {
+    background-color: plum;
+}
+
+.card-3 {
+    background-color: palevioletred;
+}
+
+.card-5 {
+    background-color: coral;
+}
+
+.card-8 {
+    background-color: yellow;
+}
+
+.card-13 {
+    background-color: teal;
+}
+
+.card-20 {
+    background-color: darkred;
+}
+
+.card-40 {
+    background-color: slategrey;
+}
+
+.card-100 {
+    background-color: lightblue;
+}

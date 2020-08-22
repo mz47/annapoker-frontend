@@ -1,16 +1,15 @@
 import React from 'react';
-import './App.css';
-import {Box, Button, Header, Heading} from "grommet/es6";
-import {Link, Route} from "react-router-dom";
-import {AddCircle, Home, Refresh, Trash, View} from "grommet-icons/es6";
-import {LoginPage} from "./LoginPage";
+import {Box} from "grommet/es6";
+import {Route} from "react-router-dom";
 import PokerPage from "./PokerPage";
 import {StartPage} from "./StartPage";
+import {NewSessionPage} from "./NewSessionPage";
 
 const App = () => (
   <Box>
     <Route path={"/"} exact component={StartPage}/>
-    <Route path={"/poker"} component={PokerPage}/>
+    <Route path={"/new"} component={NewSessionPage}/>
+    <Route path={"/poker/:sessionId"} component={PokerPage}/>
   </Box>
 )
 

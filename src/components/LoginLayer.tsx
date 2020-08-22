@@ -10,30 +10,29 @@ interface LoginLayerProps {
 }
 
 export const LoginLayer = (props: LoginLayerProps) => {
+  const {onVoteHandler, onWatchHandler, onOutsideClickHandler, onEscHandler} = props
   const [username, setUsername] = useState("")
   const [buttonsDisabled, setButtonsDisabled] = useState(true)
-
   const usernameHandler = (username: string) => {
     setUsername(username)
     username.length > 0 ? setButtonsDisabled(false) : setButtonsDisabled(true)
   }
 
   return (
-    <Layer className={"displaynone"} onEsc={props.onEscHandler} onClickOutside={props.onOutsideClickHandler}>
+    <Layer className={"displaynone"} onEsc={onEscHandler} onClickOutside={onOutsideClickHandler}>
       <Main pad="large" align={"center"}>
         <Box align={"center"}>
           <Heading>Who are you?</Heading>
           <TextInput icon={<User/>} placeholder="Username" autoFocus={true} disabled={false}
-                     onChange={e => {
-                       usernameHandler(e.target.value)
-                     }}/>
+                     onChange={e => usernameHandler(e.target.value)}
+          />
           <Box direction={"row"} margin={"small"}>
-            <Button size={"medium"} onClick={() => props.onVoteHandler(username)} disabled={buttonsDisabled}
+            <Button size={"medium"} onClick={() => onVoteHandler(username)} disabled={buttonsDisabled}
                     margin={"xsmall"}
                     primary={true}
                     icon={<Checkmark/>}
                     label={"Vote"}/>
-            <Button onClick={() => props.onWatchHandler(username)} disabled={buttonsDisabled} margin={"xsmall"}
+            <Button onClick={() => onWatchHandler(username)} disabled={buttonsDisabled} margin={"xsmall"}
                     primary={true}
                     icon={<Inspect/>}
                     label={"Watch"}/>
