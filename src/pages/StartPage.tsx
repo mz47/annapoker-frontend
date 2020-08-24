@@ -1,6 +1,6 @@
 import React from "react";
 import {Box, Heading, Image, Main} from "grommet/es6";
-import {NavHeader} from "./components/NavHeader";
+import {NavHeader} from "../components/NavHeader";
 
 export const StartPage = () => {
   return (

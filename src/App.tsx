@@ -1,9 +1,9 @@
 import React from 'react';
 import {Box} from "grommet/es6";
 import {Route} from "react-router-dom";
-import PokerPage from "./PokerPage";
-import {StartPage} from "./StartPage";
-import {NewSessionPage} from "./NewSessionPage";
+import PokerPage from "./pages/PokerPage";
+import {StartPage} from "./pages/StartPage";
+import {NewSessionPage} from "./pages/NewSessionPage";
 
 const App = () => (
   <Box>

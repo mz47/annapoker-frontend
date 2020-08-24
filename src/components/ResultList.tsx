@@ -1,5 +1,5 @@
 import React from "react";
-import {User} from "./models/models";
+import {User} from "../models/models";
 import {Table, TableBody, TableCell, TableRow, Text} from "grommet/es6";
 
 interface ResultListProps {

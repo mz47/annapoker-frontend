@@ -2,15 +2,15 @@ import React, {useEffect, useReducer, useState} from 'react';
 import {Box, Heading} from "grommet/es6";
 import {Client} from '@stomp/stompjs';
 import {v4 as uuid} from 'uuid';
-import {ResultList} from "./ResultList";
-import {GoBroadcast, GoCommand, User} from "./models/models";
-import {LoginLayer} from "./components/LoginLayer";
+import {ResultList} from "../components/ResultList";
+import {GoBroadcast, GoCommand, User} from "../models/models";
+import {LoginLayer} from "../components/LoginLayer";
 import {useParams} from 'react-router-dom'
-import {NavHeader} from "./components/NavHeader";
-import {PokerCard} from "./components/PokerCard";
+import {NavHeader} from "../components/NavHeader";
+import {PokerCard} from "../components/PokerCard";
 
 const client = new Client({
-  brokerURL: "ws://localhost:15674/ws",
+  brokerURL: process.env["REACT_APP_WEBSOCKET_HOST"],
   connectHeaders: {
     login: "guest",
     passcode: "guest"
