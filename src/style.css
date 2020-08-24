@@ -4,6 +4,11 @@ body {
     margin: 0;
 }
 
+a:link, a:hover, a:active, a:visited {
+    color: #F8F8F8;
+    text-decoration: none;
+}
+
 .App {
     text-align: center;
 }
@@ -95,4 +100,12 @@ body {
 
 .card-100 {
     background-color: lightblue;
+}
+
+.coffee {
+    height: 50px;
+    width: auto;
+    border-radius: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
 }
