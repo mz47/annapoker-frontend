@@ -13,6 +13,10 @@ a:link, a:hover, a:active, a:visited {
     text-align: center;
 }
 
+.newsession-body > a:link {
+    color: #ff3562;
+}
+
 .newsession-button {
     width: 20vw;
     height: 8vh;

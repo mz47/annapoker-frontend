@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {v4 as uuid} from "uuid";
-import {Box, Button, Heading, Text} from "grommet/es6";
+import {Box, Button, Heading} from "grommet/es6";
 import {Client} from "@stomp/stompjs";
 import {NavHeader} from "../components/NavHeader";
-import {AddCircle} from "grommet-icons/es6";
+import {AddCircle, Share} from "grommet-icons/es6";
 
 export const NewSessionPage = () => {
-  const [link, setLink] = useState("Hier könnten ihre Werbung stehen")
+  const [link, setLink] = useState("")
   const [buttonDisabled, setButtonDisabled] = useState(false)
-  const [successDisabled, setSuccessDisabled] = useState(true)
+  const [buttonVisible, setButtonVisible] = useState(true)
   const topicCommand = "/topic/go_stomp_command"
   const client = new Client({
     brokerURL: process.env["REACT_APP_WEBSOCKET_HOST"]!,
@@ -31,13 +31,13 @@ export const NewSessionPage = () => {
   const newSession = () => {
     setButtonDisabled(true)
     const sessionId = uuid()
-    client.publish({
-      destination: topicCommand,
-      body: JSON.stringify({cmd: "CREATE_SESSION", sessionId: sessionId, user: ""})
-    })
+    //client.publish({
+    //  destination: topicCommand,
+    //  body: JSON.stringify({cmd: "CREATE_SESSION", sessionId: sessionId, user: ""})
+    //})
     console.log("send command NEW_SESSION with sessionId", sessionId)
     setLink(`/poker/${sessionId}`)
-    setSuccessDisabled(false)
+    setButtonVisible(false)
   }
 
   return (
@@ -47,7 +47,7 @@ export const NewSessionPage = () => {
         resetVotingsDisabled={true}
         revealDisabled={true}
         resetUsersDisabled={true}/>
-      <Box align={"center"} pad={"large"}>
+      <Box align={"center"} pad={"large"} className={"newsession-body"}>
         <Heading>Click Create to generate a new Annapoker Session</Heading>
         <Button primary
                 className={"newsession-button"}
@@ -57,9 +57,8 @@ export const NewSessionPage = () => {
                 onClick={newSession}
                 margin={"large"}
                 disabled={buttonDisabled}/>
-        <Text size={"xxlarge"} color={"status-ok"} margin={"medium"} hidden={successDisabled}>Success!</Text>
-        <Text size={"xxlarge"} hidden={successDisabled}><a href={link} target={"_top"}>Open Session in new
-          Tab</a></Text>
+        <Button disabled={buttonVisible} size={"medium"} className={"newsession-button"} icon={<Share/>}
+                label={"Open Session"} onClick={() => {window.location.href=link}}/>
       </Box>
     </Box>
   )
