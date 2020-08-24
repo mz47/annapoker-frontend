@@ -12,8 +12,8 @@ import {PokerCard} from "../components/PokerCard";
 const client = new Client({
   brokerURL: process.env["REACT_APP_WEBSOCKET_HOST"],
   connectHeaders: {
-    login: "guest",
-    passcode: "guest"
+    login: process.env["REACT_APP_RABBITMQ_USER"]!,
+    passcode: process.env["REACT_APP_RABBITMQ_PASS"]!,
   },
   debug: function (str) {
     //console.log(str);

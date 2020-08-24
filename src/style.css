@@ -8,6 +8,12 @@ body {
     text-align: center;
 }
 
+.newsession-button {
+    width: 20vw;
+    height: 8vh;
+    font-size: 2rem !important;
+}
+
 .connectedUsers {
     display: block;
 }
