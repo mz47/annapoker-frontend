@@ -48,7 +48,6 @@ export const PokerPage = () => {
   const [forceReveal, setForceReveal] = useState(false)
 
   useEffect(() => {
-    console.log("session id:", sessionId)
     client.onConnect = () => {
       client.subscribe(topicBroadcast + "." + sessionId, message => {
         let broadcast: GoBroadcast = JSON.parse(message.body)

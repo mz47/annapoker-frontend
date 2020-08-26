@@ -31,10 +31,10 @@ export const NewSessionPage = () => {
   const newSession = () => {
     setButtonDisabled(true)
     const sessionId = uuid()
-    //client.publish({
-    //  destination: topicCommand,
-    //  body: JSON.stringify({cmd: "CREATE_SESSION", sessionId: sessionId, user: ""})
-    //})
+    client.publish({
+      destination: topicCommand,
+      body: JSON.stringify({cmd: "CREATE_SESSION", sessionId: sessionId, user: ""})
+    })
     console.log("send command NEW_SESSION with sessionId", sessionId)
     setLink(`/poker/${sessionId}`)
     setButtonVisible(false)
