@@ -25,11 +25,12 @@ const client = new Client({
 
 const topicCommand = "/topic/go_stomp_command"
 const topicBroadcast = "/topic/go_stomp_broadcast"
-const userUuid = uuid()
 const pokerCards = [1, 2, 3, 5, 8, 13, 20, 40, 100]
+let userUuid = uuid()
 
 export const PokerPage = () => {
   const {sessionId} = useParams()
+  const [welcomeMessage, setWelcomeMessage] = useState("Hi")
   const [loginLayerVisible, setLoginLayerVisible] = useState(true)
   const [loginDisabled, setLoginDisabled] = useState(false)
   const [revealDisabled, setRevealDisabled] = useState(true)
@@ -48,6 +49,7 @@ export const PokerPage = () => {
   const [forceReveal, setForceReveal] = useState(false)
 
   useEffect(() => {
+    checkIfUserIsAlreadyLoggedIn()
     client.onConnect = () => {
       client.subscribe(topicBroadcast + "." + sessionId, message => {
         let broadcast: GoBroadcast = JSON.parse(message.body)
@@ -69,6 +71,23 @@ export const PokerPage = () => {
     client.activate()
   }, [])
 
+  const checkIfUserIsAlreadyLoggedIn = () => {
+    const lastSession = sessionStorage.getItem("sessionId")
+    const lastUsername = sessionStorage.getItem("username")
+    const lastUserUuid = sessionStorage.getItem("userUuid")
+    if (lastSession === sessionId && lastUsername !== null && lastUserUuid !== null) {
+      console.log("revisiting session as", lastUsername)
+      setUsername(lastUsername)
+      userUuid = lastUserUuid
+      setWelcomeMessage("Welcome back")
+      setLoginLayerVisible(false)
+      setRevealDisabled(false)
+      setResetVotingsDisabled(false)
+      setLoginDisabled(true)
+      setVotingDisabled(false)
+    }
+  }
+
   const vote = (value: number) => {
     let updateVoteCmd: GoCommand = {
       cmd: "UPDATE_VOTING",
@@ -87,6 +106,9 @@ export const PokerPage = () => {
   }
 
   const onJoinToVote = (username: string) => {
+    sessionStorage.setItem("sessionId", sessionId)
+    sessionStorage.setItem("username", username)
+    sessionStorage.setItem("userUuid", userUuid)
     setUsername(username)
     setLoginLayerVisible(false)
     setRevealDisabled(false)
@@ -104,6 +126,9 @@ export const PokerPage = () => {
   }
 
   const onJoinToWatch = (username: string) => {
+    sessionStorage.setItem("sessionId", sessionId)
+    sessionStorage.setItem("username", username)
+    sessionStorage.setItem("userUuid", userUuid)
     setUsername(username)
     setLoginLayerVisible(false)
     setVotingDisabled(true)
@@ -131,7 +156,7 @@ export const PokerPage = () => {
         onOutsideClickHandler={() => setLoginLayerVisible(false)}
       /> : ""}
       <Box align={"center"} pad={"small"}>
-        <Heading>{`Hi ${username || "..."}!`}</Heading>
+        <Heading>{`${welcomeMessage} ${username || "..."}!`}</Heading>
         <Box align={"center"} direction={"row"}>
           {pokerCards.map(c => <PokerCard key={c} onClickHandler={() => vote(c)} value={c} disabled={votingDisabled}/>)}
         </Box>

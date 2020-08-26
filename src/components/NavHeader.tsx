@@ -40,6 +40,5 @@ export const NavHeader = (props: NavHeaderProps) => {
         </Box>
       </Box>
     </Header>
-
   )
 }

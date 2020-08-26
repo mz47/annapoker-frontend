@@ -9,7 +9,7 @@ export const StartPage = () => {
       <Main pad="large" align={"center"}>
         <Box>
           <Heading>Welcome to Annapoker!</Heading>
-          <Image fit={"contain"} src={"https://media1.giphy.com/media/xT9DPlAUKTl1GeZjC8/giphy.gif"} alt={"Mel Gibson Poker Giphy"}/>
+          <Image fit={"contain"} src={"https://media.giphy.com/media/fat0moDHhsjO8/source.gif"} alt={"Terence Hill Poker Giphy"}/>
         </Box>
       </Main>
     </Box>
