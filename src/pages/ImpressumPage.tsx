@@ -5,7 +5,8 @@ import {NavHeader} from "../components/NavHeader";
 export const ImpressumPage = () => {
   return (
     <Box>
-      <NavHeader loginDisabled={true} revealDisabled={true} resetVotingsDisabled={true} resetUsersDisabled={true}/>
+      <NavHeader loginDisabled={true} revealDisabled={true} resetVotingsDisabled={true} resetUsersDisabled={true}
+                 logoutDisabled={true}/>
       <Main margin={"medium"}>
         <h1>Impressum</h1>
         <p>Angaben gemäß § 5 TMG</p>

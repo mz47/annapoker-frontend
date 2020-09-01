@@ -15,9 +15,9 @@ const client = new Client({
     login: process.env["REACT_APP_RABBITMQ_USER"]!,
     passcode: process.env["REACT_APP_RABBITMQ_PASS"]!,
   },
-  debug: function (str) {
-    //console.log(str);
-  },
+  //debug: function (str) {
+  //console.log(str);
+  //},
   reconnectDelay: 5000,
   heartbeatIncoming: 4000,
   heartbeatOutgoing: 4000,
@@ -33,6 +33,7 @@ export const PokerPage = () => {
   const [welcomeMessage, setWelcomeMessage] = useState("Hi")
   const [loginLayerVisible, setLoginLayerVisible] = useState(true)
   const [loginDisabled, setLoginDisabled] = useState(false)
+  const [logoutDisabled, setLogoutDisabled] = useState(true)
   const [revealDisabled, setRevealDisabled] = useState(true)
   const [resetVotingsDisabled, setResetVotingsDisabled] = useState(true)
   const [votingDisabled, setVotingDisabled] = useState(true)
@@ -53,7 +54,7 @@ export const PokerPage = () => {
     client.onConnect = () => {
       client.subscribe(topicBroadcast + "." + sessionId, message => {
         let broadcast: GoBroadcast = JSON.parse(message.body)
-        console.log("received broadcast:", broadcast)
+        console.log("<<< received", broadcast.type)
         dispatchUsers(broadcast)
         if (broadcast.type === "REVEAL_VOTINGS") {
           setForceReveal(true)
@@ -61,6 +62,16 @@ export const PokerPage = () => {
         if (broadcast.type === "UPDATE_USERS") {
           setVotingDisabled(false)
           setForceReveal(false)
+        }
+        if (broadcast.type === "NO_SESSION_FOUND") {
+          setWelcomeMessage("Session not found :(")
+          sessionStorage.clear()
+          setUsername("")
+          setLoginLayerVisible(false)
+          setLoginDisabled(true)
+          setVotingDisabled(true)
+          setResetVotingsDisabled(true)
+          setRevealDisabled(true)
         }
       })
       client.publish({
@@ -76,7 +87,6 @@ export const PokerPage = () => {
     const lastUsername = sessionStorage.getItem("username")
     const lastUserUuid = sessionStorage.getItem("userUuid")
     if (lastSession === sessionId && lastUsername !== null && lastUserUuid !== null) {
-      console.log("revisiting session as", lastUsername)
       setUsername(lastUsername)
       userUuid = lastUserUuid
       setWelcomeMessage("Welcome back")
@@ -84,6 +94,7 @@ export const PokerPage = () => {
       setRevealDisabled(false)
       setResetVotingsDisabled(false)
       setLoginDisabled(true)
+      setLogoutDisabled(false)
       setVotingDisabled(false)
     }
   }
@@ -96,13 +107,32 @@ export const PokerPage = () => {
       sessionId: sessionId
     }
     client.publish({destination: topicCommand, body: JSON.stringify(updateVoteCmd)})
-    console.log("sent command:", updateVoteCmd)
+    console.log(">>> sent", updateVoteCmd.cmd)
     setVotingDisabled(true)
   }
 
   const resetVotings = () => {
     let resetCmd: GoCommand = {cmd: "RESET_VOTINGS", user: username, sessionId: sessionId}
     client.publish({destination: topicCommand, body: JSON.stringify(resetCmd)})
+  }
+
+  const logout = () => {
+    let logoutCmd: GoCommand = {
+      cmd: "REMOVE_USER",
+      user: username,
+      data: {uuid: userUuid, username: username},
+      sessionId: sessionId
+    }
+    client.publish({destination: topicCommand, body: JSON.stringify(logoutCmd)})
+    console.log(">>> sent", logoutCmd.cmd)
+    sessionStorage.clear()
+    setUsername("")
+    setLoginDisabled(false)
+    setLogoutDisabled(true)
+    setRevealDisabled(true)
+    setResetVotingsDisabled(true)
+    setWelcomeMessage("Hi")
+    setVotingDisabled(true)
   }
 
   const onJoinToVote = (username: string) => {
@@ -114,6 +144,7 @@ export const PokerPage = () => {
     setRevealDisabled(false)
     setResetVotingsDisabled(false)
     setLoginDisabled(true)
+    setLogoutDisabled(false)
     setVotingDisabled(false)
     let saveUserCmd: GoCommand = {
       cmd: "SAVE_USER",
@@ -122,7 +153,7 @@ export const PokerPage = () => {
       sessionId: sessionId
     }
     client.publish({destination: topicCommand, body: JSON.stringify(saveUserCmd)})
-    console.log("sent command:", saveUserCmd)
+    console.log(">>> sent", saveUserCmd.cmd)
   }
 
   const onJoinToWatch = (username: string) => {
@@ -136,17 +167,20 @@ export const PokerPage = () => {
     setResetVotingsDisabled(false)
     setForceReveal(true)
     setLoginDisabled(true)
+    setLogoutDisabled(false)
   }
 
   return (
     <Box>
       <NavHeader
         loginDisabled={loginDisabled}
+        logoutDisabled={logoutDisabled}
         revealDisabled={revealDisabled}
         resetVotingsDisabled={resetVotingsDisabled}
         resetUsersDisabled={true}
         loginHandler={() => setLoginLayerVisible(true)}
         revealHandler={() => setForceReveal(true)}
+        logoutHandler={logout}
         resetVotingsHandler={resetVotings}
       />
       {loginLayerVisible ? <LoginLayer
@@ -156,7 +190,7 @@ export const PokerPage = () => {
         onOutsideClickHandler={() => setLoginLayerVisible(false)}
       /> : ""}
       <Box align={"center"} pad={"small"}>
-        <Heading>{`${welcomeMessage} ${username || "..."}!`}</Heading>
+        <Heading>{`${welcomeMessage} ${username}`}</Heading>
         <Box align={"center"} direction={"row"}>
           {pokerCards.map(c => <PokerCard key={c} onClickHandler={() => vote(c)} value={c} disabled={votingDisabled}/>)}
         </Box>
