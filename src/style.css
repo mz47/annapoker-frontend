@@ -38,7 +38,7 @@ a:link, a:hover, a:active, a:visited {
 }
 
 .pokercard {
-    display: flex;
+    display: grid;
     width: 10vw;
     height: 27vh;
     border-radius: 1.3em;
@@ -52,22 +52,27 @@ a:link, a:hover, a:active, a:visited {
 }
 
 .pokercard-overlay {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    position: relative;
     margin: 0.3vw;
     border-radius: 1.3em;
     background-color: rgba(255, 255, 255, 0.8);
     cursor: not-allowed;
 }
 
-.pokercard, .pokercard-overlay {
-    grid-area: 1/1;
-}
-
 .pokercard-image {
     display: block;
     margin: auto;
-    width: 80%;
-    height: auto;
+    max-width: 90%;
+    max-height: 90%;
     user-select: none;
+}
+
+.pokercard, .pokercard-overlay {
+    grid-area: 1/1;
 }
 
 .card-1 {
